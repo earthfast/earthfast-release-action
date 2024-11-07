@@ -1,5 +1,5 @@
-name: Armada Release
-description: Create an Armada bundle and upload it as a release asset.
+name: EarthFast Release
+description: Create an EarthFast bundle and upload it as a release asset.
 inputs:
   build_dir:
     description: Project build directory
@@ -23,18 +23,18 @@ runs:
     - name: Create bundle
       id: bundle
       run: |
-        filename="$(npx --package=armada-cli@0.2.1 --yes armada bundle create ${{ inputs.bundle_name }} ${{ inputs.build_dir }})"
+        filename="$(npx earthfast-cli --yes bundle create ${{ inputs.bundle_name }} ${{ inputs.build_dir }})"
         echo "filename=$filename" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Create checksum file
       id: checksum
       run: |
-        hash="$(npx --package=armada-cli@0.2.1 --yes armada bundle checksum ${{ steps.bundle.outputs.filename }})"
-        echo "hash=$hash" >> $GITHUB_OUTPUT
+        checksum="$(npx earthfast-cli --yes bundle checksum ${{ steps.bundle.outputs.filename }})"
+        echo "checksum=$checksum" >> $GITHUB_OUTPUT
 
         filename="${{ steps.bundle.outputs.filename }}_SHA256SUM"
-        echo "$hash" > $filename
+        echo "$checksum" > $filename
         echo "filename=$filename" >> $GITHUB_OUTPUT
       shell: bash
 
